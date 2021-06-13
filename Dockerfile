@@ -1,6 +1,13 @@
-# Pull base image 
-From tomcat:8-jre8 
+FROM openjdk:8-alpine
 
-# Maintainer 
-MAINTAINER "valaxytech@gmail.com" 
-COPY ./webapp.war /usr/local/tomcat/webapps
+# Required for starting application up.
+RUN apk update && apk add /bin/sh
+
+RUN mkdir -p /opt/app
+ENV PROJECT_HOME /opt/app
+
+COPY target/spring-boot-mongo-1.0.jar $PROJECT_HOME/spring-boot-mongo.jar
+
+WORKDIR $PROJECT_HOME
+
+CMD ["java" ,"-jar","./spring-boot-mongo.jar"]
